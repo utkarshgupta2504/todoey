@@ -7,4 +7,6 @@ class Task {
   void toggleCheck() {
     isChecked = !isChecked;
   }
+
+  Map toJson() => {"title": title, "isChecked": isChecked};
 }
