@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey/models/task_data.dart';
+import 'package:provider/provider.dart';
 
 import '../main.dart';
 
@@ -17,6 +18,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   bool remindMe = false;
   DateTime reminderDate;
   TimeOfDay reminderTime;
+  int counter;
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +93,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           .subtract(Duration(seconds: 5));
                       var androidPlatformChannelSpecifics =
                           AndroidNotificationDetails(
-                        'your other channel id',
-                        'your other channel name',
-                        'your other channel description',
+                        currTask,
+                        'To Do Notification',
+                        'Do the task',
                         priority: Priority.Max,
                         importance: Importance.Max,
                         playSound: true,
@@ -103,8 +105,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       NotificationDetails platformChannelSpecifics =
                           NotificationDetails(androidPlatformChannelSpecifics,
                               iOSPlatformChannelSpecifics);
+                      int id = Provider.of<TaskData>(context, listen: false)
+                          .tasks
+                          .length;
+                      print(id);
                       await flutterLocalNotificationsPlugin.schedule(
-                          0,
+                          id,
                           'Task reminder',
                           'It is time for your task: $currTask',
                           scheduledNotificationDateTime,
