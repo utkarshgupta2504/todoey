@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey/models/task_data.dart';
 
-class AddTaskScreen extends StatelessWidget {
+import '../main.dart';
+
+class AddTaskScreen extends StatefulWidget {
+  @override
+  _AddTaskScreenState createState() => _AddTaskScreenState();
+}
+
+class _AddTaskScreenState extends State<AddTaskScreen> {
   final taskController = TextEditingController();
 
   String currTask;
+  bool remindMe = false;
+  DateTime reminderDate;
+  TimeOfDay reminderTime;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +66,79 @@ class AddTaskScreen extends StatelessWidget {
               ),
               SizedBox(
                 height: 10.0,
+              ),
+              SwitchListTile(
+                value: remindMe,
+                title: Text('Reminder'),
+                onChanged: (newValue) async {
+                  if (newValue) {
+                    reminderDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(DateTime.now().year + 2),
+                    );
+
+                    reminderTime = await showTimePicker(
+                        context: context, initialTime: TimeOfDay.now());
+
+                    if (reminderDate != null && reminderTime != null) {
+                      remindMe = newValue;
+                      var scheduledNotificationDateTime = reminderDate
+                          .add(Duration(
+                              hours: reminderTime.hour,
+                              minutes: reminderTime.minute))
+                          .subtract(Duration(seconds: 5));
+                      var androidPlatformChannelSpecifics =
+                          AndroidNotificationDetails(
+                        'your other channel id',
+                        'your other channel name',
+                        'your other channel description',
+                        priority: Priority.Max,
+                        importance: Importance.Max,
+                        playSound: true,
+                      );
+                      var iOSPlatformChannelSpecifics =
+                          IOSNotificationDetails();
+                      NotificationDetails platformChannelSpecifics =
+                          NotificationDetails(androidPlatformChannelSpecifics,
+                              iOSPlatformChannelSpecifics);
+                      await flutterLocalNotificationsPlugin.schedule(
+                          0,
+                          'Task reminder',
+                          'It is time for your task: $currTask',
+                          scheduledNotificationDateTime,
+                          platformChannelSpecifics);
+                    }
+                  } else {
+                    reminderDate = null;
+                    reminderTime = null;
+                    remindMe = newValue;
+                  }
+
+                  print(reminderTime);
+                  print(reminderDate);
+
+                  setState(() {});
+                },
+                subtitle: Text('Remind me about this item'),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Container(
+                  child: remindMe
+                      ? Text('Reminder set at: ' +
+                          DateTime(
+                                  reminderDate.year,
+                                  reminderDate.month,
+                                  reminderDate.day,
+                                  reminderTime.hour,
+                                  reminderTime.minute)
+                              .toString())
+                      : null),
+              SizedBox(
+                height: remindMe ? 10.0 : 0.0,
               ),
               FlatButton(
                 color: Colors.lightBlueAccent,
