@@ -67,7 +67,7 @@ class TasksScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${localStorage.getItem('todos').length} tasks',
+                        '${localStorage.getItem('todos') != null ? localStorage.getItem('todos').length : 0} tasks',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,
