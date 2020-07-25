@@ -47,6 +47,7 @@ class TasksList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final task = taskData.tasks[index];
                   return TaskTile(
+                    task: task,
                     title: task.title,
                     isChecked: task.isChecked,
                     callback: (newValue) {

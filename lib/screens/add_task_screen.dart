@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:todoey/models/task.dart';
 import 'package:todoey/models/task_data.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   bool remindMe = false;
   DateTime reminderDate;
   TimeOfDay reminderTime;
-  int counter;
+  int id;
 
   @override
   Widget build(BuildContext context) {
@@ -90,35 +91,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
                     if (reminderDate != null && reminderTime != null) {
                       remindMe = newValue;
-                      var scheduledNotificationDateTime = reminderDate
-                          .add(Duration(
-                              hours: reminderTime.hour,
-                              minutes: reminderTime.minute))
-                          .subtract(Duration(seconds: 5));
-                      var androidPlatformChannelSpecifics =
-                          AndroidNotificationDetails(
-                        currTask,
-                        'To Do Notification',
-                        'Do the task',
-                        priority: Priority.Max,
-                        importance: Importance.Max,
-                        playSound: true,
-                      );
-                      var iOSPlatformChannelSpecifics =
-                          IOSNotificationDetails();
-                      NotificationDetails platformChannelSpecifics =
-                          NotificationDetails(androidPlatformChannelSpecifics,
-                              iOSPlatformChannelSpecifics);
-                      int id = Provider.of<TaskData>(context, listen: false)
-                          .tasks
-                          .length;
-                      print(id);
-                      await flutterLocalNotificationsPlugin.schedule(
-                          id,
-                          'Task reminder',
-                          'It is time for your task: $currTask',
-                          scheduledNotificationDateTime,
-                          platformChannelSpecifics);
                     }
                   } else {
                     reminderDate = null;
@@ -152,11 +124,48 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
               FlatButton(
                 color: Colors.lightBlueAccent,
-                onPressed: () {
+                onPressed: () async {
+                  if (remindMe) {
+                    var scheduledNotificationDateTime = reminderDate
+                        .add(Duration(
+                            hours: reminderTime.hour,
+                            minutes: reminderTime.minute))
+                        .subtract(Duration(seconds: 5));
+                    var androidPlatformChannelSpecifics =
+                        AndroidNotificationDetails(
+                      currTask,
+                      'To Do Notification',
+                      'Do the task',
+                      priority: Priority.Max,
+                      importance: Importance.Max,
+                      playSound: true,
+                    );
+                    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+                    NotificationDetails platformChannelSpecifics =
+                        NotificationDetails(androidPlatformChannelSpecifics,
+                            iOSPlatformChannelSpecifics);
+                    id = Provider.of<TaskData>(context, listen: false)
+                        .tasks
+                        .length;
+                    print(id);
+                    await flutterLocalNotificationsPlugin.schedule(
+                        id,
+                        'Task reminder',
+                        'It is time for your task: $currTask',
+                        scheduledNotificationDateTime,
+                        platformChannelSpecifics);
+                  }
+
                   Provider.of<TaskData>(
                     context,
                     listen: false,
-                  ).addTask(currTask);
+                  ).addTask(Task(
+                    title: currTask,
+                    isChecked: false,
+                    reminderDate: reminderDate,
+                    reminderTime: reminderTime,
+                    reminderId: id,
+                  ));
                   Navigator.pop(context);
                 },
                 child: Text(

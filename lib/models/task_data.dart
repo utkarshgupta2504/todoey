@@ -8,7 +8,7 @@ final LocalStorage localStorage = LocalStorage(
 
 class TaskData extends ChangeNotifier {
   List<Task> tasks = [
-    Task(title: 'This Is A Task'),
+    Task(title: 'This Is A Task, Double tap to view details.'),
     Task(title: 'Click the + button, to add a new task'),
     Task(title: 'Check the task, to mark it complete'),
     Task(title: 'Hold the text to delete the task.'),
@@ -18,8 +18,8 @@ class TaskData extends ChangeNotifier {
     await localStorage.setItem('todos', tasks.map((e) => e.toJson()).toList());
   }
 
-  Future<void> addTask(String title) async {
-    tasks.add(Task(title: title));
+  Future<void> addTask(Task task) async {
+    tasks.add(task);
     await _saveToStorage();
     notifyListeners();
   }
@@ -42,10 +42,22 @@ class TaskData extends ChangeNotifier {
 
   Future<void> init(item) async {
     print(item);
-    if (item.length > 0) {
+    if (item != null && item.length > 0) {
       tasks.clear();
       for (Map e in item) {
-        tasks.add(Task(title: e['title'], isChecked: e['isChecked']));
+        tasks.add(Task(
+            title: e['title'],
+            isChecked: e['isChecked'],
+            reminderDate: e['reminderDate'] != null
+                ? DateTime.parse(e['reminderDate'])
+                : null,
+            reminderTime: e['reminderTime'] != null
+                ? e['reminderTime']
+                : TimeOfDay(
+                    hour: 0,
+                    minute: 0,
+                  ),
+            reminderId: e['reminderId']));
       }
       print('zeroth');
     }
