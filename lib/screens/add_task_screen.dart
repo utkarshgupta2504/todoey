@@ -81,6 +81,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       lastDate: DateTime(DateTime.now().year + 2),
                     );
 
+                    if (reminderDate == null) {
+                      return;
+                    }
+
                     reminderTime = await showTimePicker(
                         context: context, initialTime: TimeOfDay.now());
 
