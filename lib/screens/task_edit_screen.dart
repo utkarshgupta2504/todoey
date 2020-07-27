@@ -214,9 +214,9 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
                                         });
                                       },
                                       child: Text(
-                                        widget.task.reminderDate != null ||
-                                                newTaskReminderDate != null
-                                            ? reminderDateString
+                                        newTaskReminderDate != null
+                                            ? reminderDateString.substring(0,
+                                                reminderDateString.length - 7)
                                             : 'Not Set',
                                         style: TextStyle(
                                           color: Colors.white,
@@ -224,6 +224,15 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
                                       ),
                                     ),
                                   ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete_outline),
+                                    onPressed: () {
+                                      setState(() {
+                                        newTaskReminderDate = null;
+                                      });
+                                    },
+                                    color: Colors.red,
+                                  )
                                 ],
                               ),
                             ],
@@ -240,10 +249,14 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
                                     newTaskIsChecked == dropDownVal &&
                                     newTaskReminderDate ==
                                         widget.task.reminderDate) {
+                                  Navigator.pop(context);
                                   return;
                                 }
 
-                                if (reminderDate != newTaskReminderDate) {
+                                int id;
+
+                                if (reminderDate != newTaskReminderDate &&
+                                    newTaskReminderDate != null) {
                                   var scheduledNotificationDateTime =
                                       newTaskReminderDate
                                           .subtract(Duration(seconds: 5));
@@ -262,8 +275,14 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
                                       NotificationDetails(
                                           androidPlatformChannelSpecifics,
                                           iOSPlatformChannelSpecifics);
-                                  int id = widget.task.reminderId;
+                                  id = widget.task.reminderId != null
+                                      ? widget.task.reminderId
+                                      : Provider.of<TaskData>(context,
+                                              listen: false)
+                                          .tasks
+                                          .indexOf(widget.task);
                                   print(id);
+
                                   await flutterLocalNotificationsPlugin
                                       .cancel(id);
                                   await flutterLocalNotificationsPlugin.schedule(
@@ -274,6 +293,12 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
                                       platformChannelSpecifics);
                                 }
 
+                                if (widget.task.reminderDate != null &&
+                                    newTaskReminderDate == null) {
+                                  await flutterLocalNotificationsPlugin
+                                      .cancel(widget.task.reminderId);
+                                }
+
                                 Provider.of<TaskData>(context, listen: false)
                                     .modifyTask(
                                         widget.task,
@@ -281,8 +306,7 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
                                             title: newTaskTitle,
                                             isChecked: dropDownVal,
                                             reminderDate: newTaskReminderDate,
-                                            reminderId:
-                                                widget.task.reminderId));
+                                            reminderId: id));
 
                                 Navigator.pop(context);
                               },
