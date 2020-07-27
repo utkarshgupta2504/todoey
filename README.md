@@ -4,9 +4,14 @@ A todo-list application, made using flutter
 
 ## ChangeLog:
 
+### v 1.5.0
+- Added option to edit task from the view task screen.
+- Added option to check task from the view task screen.
+- Optimised Performance
+
 ### v 1.4.0
-Added option to view task - Double tap on the task to view details about the task.
-Fixed bug: Reminder added only when task is added.
+- Added option to view task - Double tap on the task to view details about the task.
+- Fixed bug: Reminder added only when task is added.
 
 ### v1.3.3
 Minor bug fixes

@@ -36,6 +36,19 @@ class TaskData extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> modifyTask(Task original, Task newTask) async {
+    for (int i = 0; i < tasks.length; i++) {
+      if (tasks[i] == original) {
+        print('Task found at $i');
+        tasks[i] = newTask;
+        break;
+      }
+    }
+
+    await _saveToStorage();
+    notifyListeners();
+  }
+
   int get taskCount {
     return tasks.length;
   }
@@ -51,12 +64,6 @@ class TaskData extends ChangeNotifier {
             reminderDate: e['reminderDate'] != null
                 ? DateTime.parse(e['reminderDate'])
                 : null,
-            reminderTime: e['reminderTime'] != null
-                ? e['reminderTime']
-                : TimeOfDay(
-                    hour: 0,
-                    minute: 0,
-                  ),
             reminderId: e['reminderId']));
       }
       print('zeroth');

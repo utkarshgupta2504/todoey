@@ -162,8 +162,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   ).addTask(Task(
                     title: currTask,
                     isChecked: false,
-                    reminderDate: reminderDate,
-                    reminderTime: reminderTime,
+                    reminderDate: reminderDate.add(Duration(
+                      hours: reminderTime.hour,
+                      minutes: reminderTime.minute,
+                    )),
                     reminderId: id,
                   ));
                   Navigator.pop(context);

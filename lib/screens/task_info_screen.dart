@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoey/models/task.dart';
+import 'package:todoey/models/task_data.dart';
+import 'package:todoey/screens/task_edit_screen.dart';
+import 'package:todoey/widgets/option_button.dart';
 
 import '../constants.dart';
 
-class TaskInfo extends StatelessWidget {
-  TaskInfo({this.task});
+class TaskInfoScreen extends StatelessWidget {
+  TaskInfoScreen({this.task, this.index});
 
   final Task task;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,7 @@ class TaskInfo extends StatelessWidget {
             children: <Widget>[
               FlatButton(
                 child: Icon(
-                  Icons.keyboard_backspace,
+                  Icons.arrow_back,
                   color: Colors.white,
                   size: 50.0,
                 ),
@@ -80,11 +85,37 @@ class TaskInfo extends StatelessWidget {
                           height: 10.0,
                         ),
                         Text(
-                          'Task Reminder: ${task.reminderDate != null ? task.reminderDate.add(Duration(
-                                hours: task.reminderTime.hour,
-                                minutes: task.reminderTime.minute,
-                              )).toString() : "Not set"}',
+                          'Task Reminder: ${task.reminderDate != null ? task.reminderDate.toString() : "Not set"}',
                           style: kTaskInfoTextStyle,
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              OptionButton(
+                                title:
+                                    'Mark ${task.isChecked ? 'Inc' : 'C'}omplete',
+                                onPressed: () {
+                                  Provider.of<TaskData>(
+                                    context,
+                                    listen: false,
+                                  ).toggleCheck(task);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              SizedBox(height: 20.0),
+                              OptionButton(
+                                  title: 'Edit Task',
+                                  onPressed: () async {
+                                    await Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return TaskEditScreen(task: task);
+                                    }));
+                                    Navigator.pop(context);
+                                  }),
+                            ],
+                          ),
                         ),
                       ],
                     ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoey/models/task.dart';
-import 'package:todoey/screens/task_info.dart';
+import 'package:todoey/models/task_data.dart';
+import 'package:todoey/screens/task_info_screen.dart';
 
 class TaskTile extends StatelessWidget {
   TaskTile(
@@ -8,13 +10,13 @@ class TaskTile extends StatelessWidget {
       this.isChecked,
       this.callback,
       this.deleteCallback,
-      this.task});
+      this.index});
 
   final String title;
   final bool isChecked;
   final Function callback;
   final Function deleteCallback;
-  final Task task;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +24,9 @@ class TaskTile extends StatelessWidget {
       onLongPress: deleteCallback,
       onDoubleTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return TaskInfo(
-            task: task,
+          return TaskInfoScreen(
+            index: index,
+            task: Provider.of<TaskData>(context).tasks[index],
           );
         }));
       },
