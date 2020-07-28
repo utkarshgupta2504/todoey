@@ -4,6 +4,10 @@ A todo-list application, made using flutter
 
 ## ChangeLog:
 
+### v 1.6.0
+- Implemented swipe to delete functionality.
+- Holding and double tap both open task info screen.
+
 ### v 1.5.1
 - Added option to remove reminder in edit task.
 - Fixed bugs:

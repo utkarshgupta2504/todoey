@@ -46,16 +46,55 @@ class TasksList extends StatelessWidget {
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final task = taskData.tasks[index];
-                  return TaskTile(
-                    index: index,
-                    title: task.title,
-                    isChecked: task.isChecked,
-                    callback: (newValue) {
-                      taskData.toggleCheck(task);
-                    },
-                    deleteCallback: () {
+                  return Dismissible(
+                    key: UniqueKey(),
+                    onDismissed: (direction) {
                       taskData.deleteTask(task);
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                        content: Text('Item Removed'),
+                        action: SnackBarAction(
+                            label: 'UNDO',
+                            onPressed: () {
+                              taskData.addTask(task, index: index);
+                            }),
+                      ));
                     },
+                    background: Container(
+                      color: Colors.red,
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                    secondaryBackground: Container(
+                      padding: EdgeInsets.only(right: 20.0),
+                      color: Colors.red,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                    child: TaskTile(
+                      index: index,
+                      title: task.title,
+                      isChecked: task.isChecked,
+                      callback: (newValue) {
+                        taskData.toggleCheck(task);
+                      },
+                    ),
                   );
                 },
                 itemCount: taskData.tasks.length,

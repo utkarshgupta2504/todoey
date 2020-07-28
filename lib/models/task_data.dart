@@ -8,18 +8,22 @@ final LocalStorage localStorage = LocalStorage(
 
 class TaskData extends ChangeNotifier {
   List<Task> tasks = [
-    Task(title: 'This Is A Task, Double tap to view details.'),
+    Task(title: 'This Is A Task, Hold to view details.'),
     Task(title: 'Click the + button, to add a new task'),
     Task(title: 'Check the task, to mark it complete'),
-    Task(title: 'Hold the text to delete the task.'),
+    Task(title: 'Swipe in any direction to delete the task.'),
   ];
 
   Future<void> _saveToStorage() async {
     await localStorage.setItem('todos', tasks.map((e) => e.toJson()).toList());
   }
 
-  Future<void> addTask(Task task) async {
-    tasks.add(task);
+  Future<void> addTask(Task task, {int index}) async {
+    if (index != null) {
+      tasks.insert(index, task);
+    } else {
+      tasks.add(task);
+    }
     await _saveToStorage();
     notifyListeners();
   }
