@@ -4,6 +4,9 @@ A todo-list application, made using flutter
 
 ## ChangeLog:
 
+### v 1.7.2
+- Added dark mode feature, will use the default device theme.
+
 ### v 1.7.1
 - Fixed Bugs:
     - Task count did not update

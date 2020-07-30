@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todoey/screens/add_task_screen.dart';
 import 'package:todoey/screens/app_info_screen.dart';
 import 'package:todoey/screens/instructions_screen.dart';
+import 'package:todoey/screens/settings_screen.dart';
 import 'package:todoey/widgets/tasks_list.dart' hide localStorage;
 import 'package:todoey/models/task_data.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,7 +31,14 @@ class TasksScreen extends StatelessWidget {
                   title: Text('How to use'),
                   onTap: () {
                     Navigator.pushNamed(context, InstructionsScreen.id);
-                  })
+                  }),
+//              ListTile(
+//                leading: Icon(Icons.settings),
+//                title: Text('Settings'),
+//                onTap: () {
+//                  Navigator.pushNamed(context, SettingsScreen.id);
+//                },
+//              )
             ],
           ),
         ),
@@ -111,7 +119,7 @@ class TasksScreen extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30.0),
                         topRight: Radius.circular(30.0),

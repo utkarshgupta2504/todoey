@@ -3,7 +3,7 @@ import 'package:todoey/models/task_data.dart';
 import 'package:todoey/screens/add_task_screen.dart';
 import 'package:todoey/screens/app_info_screen.dart';
 import 'package:todoey/screens/instructions_screen.dart';
-import 'package:todoey/screens/task_edit_screen.dart';
+import 'package:todoey/screens/settings_screen.dart';
 import 'package:todoey/screens/tasks_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -29,6 +29,8 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<TaskData>(
       create: (context) => TaskData(),
       child: MaterialApp(
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
         title: 'ToDoey',
         initialRoute: TasksScreen.id,
         routes: {
@@ -36,6 +38,7 @@ class MyApp extends StatelessWidget {
           AddTaskScreen.id: (context) => AddTaskScreen(),
           AppInfoScreen.id: (context) => AppInfoScreen(),
           InstructionsScreen.id: (context) => InstructionsScreen(),
+          SettingsScreen.id: (context) => SettingsScreen(),
         },
       ),
     );
