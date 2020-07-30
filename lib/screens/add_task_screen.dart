@@ -7,6 +7,8 @@ import 'package:todoey/models/task_data.dart';
 import '../main.dart';
 
 class AddTaskScreen extends StatefulWidget {
+  static String id = 'AddTaskScreen';
+
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }

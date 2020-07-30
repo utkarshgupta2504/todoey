@@ -7,12 +7,7 @@ final LocalStorage localStorage = LocalStorage(
 );
 
 class TaskData extends ChangeNotifier {
-  List<Task> tasks = [
-    Task(title: 'This Is A Task, Hold to view details.'),
-    Task(title: 'Click the + button, to add a new task'),
-    Task(title: 'Check the task, to mark it complete'),
-    Task(title: 'Swipe in any direction to delete the task.'),
-  ];
+  List<Task> tasks = [];
 
   Future<void> _saveToStorage() async {
     await localStorage.setItem('todos', tasks.map((e) => e.toJson()).toList());
@@ -70,7 +65,6 @@ class TaskData extends ChangeNotifier {
                 : null,
             reminderId: e['reminderId']));
       }
-      print('zeroth');
     }
   }
 }

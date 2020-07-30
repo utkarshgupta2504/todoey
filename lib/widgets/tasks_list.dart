@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
+import 'package:todoey/models/task.dart';
 import 'package:todoey/models/task_data.dart';
 import 'package:todoey/widgets/task_tile.dart';
 
@@ -13,21 +14,29 @@ class TasksList extends StatelessWidget {
   Future<bool> get getData async {
     TaskData taskData = TaskData();
 
-    if (!initialised) {
-      await localStorage.ready;
+    await localStorage.ready;
+
+    if (localStorage != null) {
       tasksList = await localStorage.getItem('todos');
-      await taskData.init(tasksList);
-      initialised = true;
-      return true;
-    } else {
-      return true;
+      print('local');
+      print(tasksList);
+      if (tasksList == null) {
+        tasksList = [
+          Task(title: 'This Is A Task, Hold to view details.'),
+          Task(title: 'Click the + button, to add a new task'),
+          Task(title: 'Check the task, to mark it complete'),
+          Task(title: 'Swipe in any direction to delete the task.'),
+        ].map((e) => e.toJson()).toList();
+      }
     }
+
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: localStorage.ready,
+      future: getData,
       builder: (context, snapshot) {
         print(snapshot);
         if (!snapshot.hasData) {
@@ -38,16 +47,32 @@ class TasksList extends StatelessWidget {
           return Consumer<TaskData>(
             builder: (context, taskData, child) {
               if (!initialised) {
-                tasksList = localStorage.getItem('todos');
                 taskData.init(tasksList);
                 initialised = true;
               }
               print(taskData.tasks);
+
+              if (taskData.tasks.length == 0) {
+                return Center(
+                  child: Text(
+                    'Woohoo! You are all caught up!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 25.0,
+                    ),
+                  ),
+                );
+              }
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final task = taskData.tasks[index];
                   return Dismissible(
                     key: UniqueKey(),
+                    dismissThresholds: {
+                      DismissDirection.startToEnd: 0.6,
+                      DismissDirection.endToStart: 0.6,
+                    },
                     onDismissed: (direction) {
                       taskData.deleteTask(task);
                       Scaffold.of(context).showSnackBar(SnackBar(

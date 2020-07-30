@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey/constants.dart';
 import 'package:todoey/models/task.dart';
@@ -53,9 +54,9 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
             children: <Widget>[
               FlatButton(
                 child: Icon(
-                  Icons.arrow_back,
+                  FontAwesomeIcons.arrowLeft,
                   color: Colors.white,
-                  size: 50.0,
+                  size: 40.0,
                 ),
                 onPressed: () {
                   Navigator.pop(context);
