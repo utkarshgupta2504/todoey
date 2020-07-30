@@ -4,7 +4,11 @@ A todo-list application, made using flutter
 
 ## ChangeLog:
 
-### v1.7.0
+### v 1.7.1
+- Fixed Bugs:
+    - Task count did not update
+
+### v 1.7.0
 - Added app drawer by clicking on main icon.
 - Starting instructions will not show after initial start and deleting.
 - Instructions can be accessed in the left pane.

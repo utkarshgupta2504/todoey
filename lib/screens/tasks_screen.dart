@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoey/screens/add_task_screen.dart';
 import 'package:todoey/screens/app_info_screen.dart';
 import 'package:todoey/screens/instructions_screen.dart';
@@ -97,7 +98,7 @@ class TasksScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${localStorage.getItem('todos') != null ? localStorage.getItem('todos').length : 0} tasks',
+                        '${Provider.of<TaskData>(context).tasks.length} tasks',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,
