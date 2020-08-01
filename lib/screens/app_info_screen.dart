@@ -37,7 +37,7 @@ class AppInfoScreen extends StatelessWidget {
                       thickness: 2.0,
                     ),
                     ListTile(
-                      title: Text('Current Version: 1.7.2'),
+                      title: Text('Current Version: 1.7.3'),
                     ),
                   ],
                 ),
