@@ -32,13 +32,13 @@ class TasksScreen extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(context, InstructionsScreen.id);
                   }),
-//              ListTile(
-//                leading: Icon(Icons.settings),
-//                title: Text('Settings'),
-//                onTap: () {
-//                  Navigator.pushNamed(context, SettingsScreen.id);
-//                },
-//              )
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+                onTap: () {
+                  Navigator.pushNamed(context, SettingsScreen.id);
+                },
+              )
             ],
           ),
         ),

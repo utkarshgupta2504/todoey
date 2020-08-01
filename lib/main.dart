@@ -19,28 +19,27 @@ Future<void> main() async {
       initializationSettingsAndroid, initializationSettingsIOS);
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider<TaskData>(
+    create: (_) => TaskData(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TaskData>(
-      create: (context) => TaskData(),
-      child: MaterialApp(
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
-        title: 'ToDoey',
-        initialRoute: TasksScreen.id,
-        routes: {
-          TasksScreen.id: (context) => TasksScreen(),
-          AddTaskScreen.id: (context) => AddTaskScreen(),
-          AppInfoScreen.id: (context) => AppInfoScreen(),
-          InstructionsScreen.id: (context) => InstructionsScreen(),
-          SettingsScreen.id: (context) => SettingsScreen(),
-        },
-      ),
+    return MaterialApp(
+      theme: Provider.of<TaskData>(context).currTheme,
+      title: 'ToDoey',
+      initialRoute: TasksScreen.id,
+      routes: {
+        TasksScreen.id: (context) => TasksScreen(),
+        AddTaskScreen.id: (context) => AddTaskScreen(),
+        AppInfoScreen.id: (context) => AppInfoScreen(),
+        InstructionsScreen.id: (context) => InstructionsScreen(),
+        SettingsScreen.id: (context) => SettingsScreen(),
+      },
     );
   }
 }

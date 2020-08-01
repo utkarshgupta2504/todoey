@@ -7,6 +7,9 @@ final LocalStorage localStorage = LocalStorage(
 );
 
 class TaskData extends ChangeNotifier {
+
+  ThemeData currTheme = ThemeData.light();
+
   List<Task> tasks = [];
 
   Future<void> _saveToStorage() async {
@@ -66,5 +69,16 @@ class TaskData extends ChangeNotifier {
             reminderId: e['reminderId']));
       }
     }
+  }
+
+  void toggleTheme() {
+    if(currTheme == ThemeData.light()) {
+      currTheme = ThemeData.dark();
+    }
+    else {
+      currTheme = ThemeData.light();
+    }
+
+    notifyListeners();
   }
 }
