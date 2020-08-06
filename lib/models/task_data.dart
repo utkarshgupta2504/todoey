@@ -7,12 +7,12 @@ final LocalStorage localStorage = LocalStorage(
 );
 
 class TaskData extends ChangeNotifier {
-
   ThemeData currTheme = ThemeData.light();
 
   List<Task> tasks = [];
 
   Future<void> _saveToStorage() async {
+    await localStorage.setItem('theme', currTheme == ThemeData.dark() ? 'dark' : 'light');
     await localStorage.setItem('todos', tasks.map((e) => e.toJson()).toList());
   }
 
@@ -63,22 +63,19 @@ class TaskData extends ChangeNotifier {
         tasks.add(Task(
             title: e['title'],
             isChecked: e['isChecked'],
-            reminderDate: e['reminderDate'] != null
-                ? DateTime.parse(e['reminderDate'])
-                : null,
+            reminderDate: e['reminderDate'] != null ? DateTime.parse(e['reminderDate']) : null,
             reminderId: e['reminderId']));
       }
     }
   }
 
-  void toggleTheme() {
-    if(currTheme == ThemeData.light()) {
+  Future<void> toggleTheme() async {
+    if (currTheme == ThemeData.light()) {
       currTheme = ThemeData.dark();
-    }
-    else {
+    } else {
       currTheme = ThemeData.light();
     }
-
+    await _saveToStorage();
     notifyListeners();
   }
 }

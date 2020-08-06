@@ -9,16 +9,17 @@ final LocalStorage localStorage = LocalStorage('toDoList.json');
 
 bool initialised = false;
 List tasksList = [];
+String theme;
 
 class TasksList extends StatelessWidget {
   Future<bool> get getData async {
-    TaskData taskData = TaskData();
-
     await localStorage.ready;
 
     if (localStorage != null) {
+      theme = await localStorage.getItem('theme');
+
       tasksList = await localStorage.getItem('todos');
-      print('local');
+      print(theme);
       print(tasksList);
       if (tasksList == null) {
         tasksList = [
@@ -47,6 +48,9 @@ class TasksList extends StatelessWidget {
           return Consumer<TaskData>(
             builder: (context, taskData, child) {
               if (!initialised) {
+                if (theme == 'dark') {
+                  taskData.toggleTheme();
+                }
                 taskData.init(tasksList);
                 initialised = true;
               }

@@ -8,7 +8,7 @@
 .buildlog/
 .history
 .svn/
-key.properties
+android/key.properties
 
 # IntelliJ related
 *.iml

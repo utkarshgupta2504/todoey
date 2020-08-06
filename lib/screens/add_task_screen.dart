@@ -16,7 +16,7 @@ class AddTaskScreen extends StatefulWidget {
 class _AddTaskScreenState extends State<AddTaskScreen> {
   final taskController = TextEditingController();
 
-  String currTask;
+  String currTask = '';
   bool remindMe = false;
   DateTime reminderDate;
   TimeOfDay reminderTime;
@@ -87,8 +87,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       return;
                     }
 
-                    reminderTime = await showTimePicker(
-                        context: context, initialTime: TimeOfDay.now());
+                    reminderTime =
+                        await showTimePicker(context: context, initialTime: TimeOfDay.now());
 
                     if (reminderDate != null && reminderTime != null) {
                       remindMe = newValue;
@@ -112,12 +112,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               Container(
                   child: remindMe
                       ? Text('Reminder set at: ' +
-                          DateTime(
-                                  reminderDate.year,
-                                  reminderDate.month,
-                                  reminderDate.day,
-                                  reminderTime.hour,
-                                  reminderTime.minute)
+                          DateTime(reminderDate.year, reminderDate.month, reminderDate.day,
+                                  reminderTime.hour, reminderTime.minute)
                               .toString())
                       : null),
               SizedBox(
@@ -128,12 +124,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 onPressed: () async {
                   if (remindMe) {
                     var scheduledNotificationDateTime = reminderDate
-                        .add(Duration(
-                            hours: reminderTime.hour,
-                            minutes: reminderTime.minute))
+                        .add(Duration(hours: reminderTime.hour, minutes: reminderTime.minute))
                         .subtract(Duration(seconds: 5));
-                    var androidPlatformChannelSpecifics =
-                        AndroidNotificationDetails(
+                    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
                       currTask,
                       'To Do Notification',
                       'Do the task',
@@ -142,12 +135,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       playSound: true,
                     );
                     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-                    NotificationDetails platformChannelSpecifics =
-                        NotificationDetails(androidPlatformChannelSpecifics,
-                            iOSPlatformChannelSpecifics);
-                    id = Provider.of<TaskData>(context, listen: false)
-                        .tasks
-                        .length;
+                    NotificationDetails platformChannelSpecifics = NotificationDetails(
+                        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+                    id = Provider.of<TaskData>(context, listen: false).tasks.length;
                     print(id);
                     await flutterLocalNotificationsPlugin.schedule(
                         id,

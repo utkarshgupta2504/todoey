@@ -4,6 +4,10 @@ A todo-list application, made using flutter
 
 ## ChangeLog:
 
+### v 1.7.4
+- Fixed minor bugs:
+    - Blank task was crashing app.
+
 ### v 1.7.3
 - Added dark mode switch.
 
